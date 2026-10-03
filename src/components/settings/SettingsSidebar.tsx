@@ -53,12 +53,12 @@ export default function SettingsSidebar() {
   const pathname = usePathname();
 
   return (
-    <aside className="sticky top-0 flex h-screen w-[250px] shrink-0 flex-col border-r border-white/10 bg-[#1e1f1d] text-white">
-      <div className="flex h-16 items-center gap-3 border-b border-white/10 px-5">
+    <aside className="crm-sidebar">
+      <div className="crm-sidebar__head justify-start gap-3">
         <Link
           href="/inicio"
           title="Voltar ao CRM"
-          className="flex h-8 w-8 items-center justify-center rounded-full border border-white/15 text-zinc-400 hover:bg-white/5 hover:text-white"
+          className="crm-icon-button border-white/10 bg-white/5 text-slate-400 hover:text-white"
         >
           <ArrowLeft size={16} />
         </Link>
@@ -68,7 +68,7 @@ export default function SettingsSidebar() {
         </div>
       </div>
 
-      <nav className="flex-1 space-y-1 overflow-y-auto px-3 py-3">
+      <nav className="crm-sidebar__nav flex-1 overflow-y-auto">
         {items.map(([slug, label, Icon]) => {
           const href = `/configuracoes/${slug}`;
           const active = pathname === href;
@@ -76,7 +76,7 @@ export default function SettingsSidebar() {
             <Link
               key={slug}
               href={href}
-              className={`flex items-center gap-3 rounded-md px-3 py-2 text-sm transition ${active ? 'bg-slate-700/70 text-sky-300' : 'text-zinc-300 hover:bg-white/5 hover:text-white'}`}
+              className={`crm-nav-item ${active ? 'crm-nav-item--active' : ''}`}
             >
               <Icon size={16} />
               <span>{label}</span>

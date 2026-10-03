@@ -1,0 +1,15 @@
+'use client';
+
+import { useEffect, useState, type FormEvent } from 'react';
+import { useRouter } from 'next/navigation';
+import { Eye, EyeOff, Loader2 } from 'lucide-react';
+import { AuthError, AuthPage, Z10Logo, authInputClass } from '@/components/auth/AuthUI';
+import { authDestination } from '@/lib/auth-destination';
+import { supabase } from '@/lib/supabase';
+
+export default function DefinirSenhaPage() {
+  const router = useRouter(); const [password, setPassword] = useState(''); const [confirm, setConfirm] = useState(''); const [show, setShow] = useState(false); const [loading, setLoading] = useState(false); const [error, setError] = useState(''); const [invite, setInvite] = useState(false);
+  useEffect(() => { setInvite(new URLSearchParams(window.location.search).get('mode') === 'invite'); }, []);
+  async function submit(event: FormEvent) { event.preventDefault(); setError(''); if (password.length < 6) return setError('A senha precisa ter pelo menos 6 caracteres.'); if (password !== confirm) return setError('As senhas não são iguais.'); setLoading(true); const { error: updateError } = await supabase.auth.updateUser({ password }); if (updateError) { setLoading(false); return setError(updateError.message); } const { data: { session } } = await supabase.auth.getSession(); if (invite && session) { const response = await fetch('/api/members/accept', { method: 'POST', headers: { Authorization: `Bearer ${session.access_token}` } }); if (!response.ok) { const result = await response.json(); setLoading(false); return setError(result.error || 'Não foi possível ativar o convite.'); } } router.replace(invite ? '/inicio' : await authDestination()); router.refresh(); }
+  return <AuthPage wide><div className="p-8 sm:p-12"><Z10Logo centered/><h1 className="mt-8 text-center text-3xl font-black text-slate-950">{invite ? 'Ativar seu acesso' : 'Criar nova senha'}</h1><p className="mt-3 text-center leading-6 text-slate-500">{invite ? 'Defina sua senha para concluir o convite e entrar na empresa.' : 'Escolha uma senha segura para sua conta.'}</p><form onSubmit={submit} className="mt-8 space-y-4"><label className="block"><span className="mb-1.5 block font-semibold text-slate-800">Nova senha</span><div className="relative"><input required type={show ? 'text' : 'password'} value={password} onChange={(event) => setPassword(event.target.value)} className={`${authInputClass} pr-12`}/><button type="button" onClick={() => setShow((value) => !value)} className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-500">{show ? <EyeOff size={20}/> : <Eye size={20}/>}</button></div></label><label className="block"><span className="mb-1.5 block font-semibold text-slate-800">Confirmar senha</span><input required type={show ? 'text' : 'password'} value={confirm} onChange={(event) => setConfirm(event.target.value)} className={authInputClass}/></label><AuthError message={error}/><button disabled={loading} className="flex w-full items-center justify-center gap-2 rounded-xl bg-blue-600 py-3.5 font-bold text-white disabled:bg-blue-300">{loading && <Loader2 className="animate-spin" size={18}/>} Salvar e continuar</button></form></div></AuthPage>;
+}

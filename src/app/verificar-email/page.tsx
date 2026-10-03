@@ -1,0 +1,18 @@
+'use client';
+
+import { useEffect, useRef, useState } from 'react';
+import Link from 'next/link';
+import { useRouter } from 'next/navigation';
+import { Loader2, MailCheck } from 'lucide-react';
+import { AuthError, AuthPage, Z10Logo } from '@/components/auth/AuthUI';
+import { supabase } from '@/lib/supabase';
+
+export default function VerificarEmailPage() {
+  const router = useRouter(); const refs = useRef<Array<HTMLInputElement | null>>([]);
+  const [email, setEmail] = useState(''); const [digits, setDigits] = useState(['', '', '', '', '', '']); const [loading, setLoading] = useState(false); const [error, setError] = useState(''); const [message, setMessage] = useState('');
+  useEffect(() => { const params = new URLSearchParams(window.location.search); setEmail(params.get('email') || sessionStorage.getItem('z10_signup_email') || ''); }, []);
+  function update(index: number, value: string) { const digit = value.replace(/\D/g, '').slice(-1); setDigits((current) => current.map((item, position) => position === index ? digit : item)); if (digit && index < 5) refs.current[index + 1]?.focus(); }
+  async function verify() { const token = digits.join(''); if (!email || token.length !== 6) return setError('Digite os 6 números recebidos por e-mail.'); setLoading(true); setError(''); const { error: verifyError } = await supabase.auth.verifyOtp({ email, token, type: 'signup' }); setLoading(false); if (verifyError) return setError('Código inválido ou expirado. Solicite um novo código.'); router.replace('/onboarding/empresa'); }
+  async function resend() { if (!email) return setError('Informe o e-mail novamente pela tela de cadastro.'); const { error: resendError } = await supabase.auth.resend({ type: 'signup', email, options: { emailRedirectTo: `${window.location.origin}/auth/callback` } }); if (resendError) return setError(resendError.message); setMessage('Novo código enviado. Confira também a caixa de spam.'); }
+  return <AuthPage wide><div className="p-8 text-center sm:p-12"><Z10Logo centered/><MailCheck className="mx-auto mt-8 text-blue-600" size={40}/><h1 className="mt-4 text-3xl font-black text-slate-950">Verificar e-mail</h1><p className="mx-auto mt-3 max-w-md leading-6 text-slate-500">Enviamos a confirmação para <strong className="text-slate-700">{email || 'seu e-mail'}</strong>. Digite o código ou clique no link recebido.</p><div className="mx-auto mt-8 flex max-w-sm justify-center gap-2">{digits.map((digit, index) => <input key={index} ref={(element) => { refs.current[index] = element; }} inputMode="numeric" maxLength={1} value={digit} onChange={(event) => update(index, event.target.value)} onKeyDown={(event) => { if (event.key === 'Backspace' && !digit && index > 0) refs.current[index - 1]?.focus(); }} className="h-14 w-12 rounded-lg border border-slate-300 text-center text-2xl font-bold text-slate-950 outline-none focus:border-blue-500"/>)}</div><div className="mt-6"><AuthError message={error}/>{message && <div className="rounded-xl border border-emerald-200 bg-emerald-50 px-4 py-3 text-sm text-emerald-700">{message}</div>}</div><button onClick={verify} disabled={loading || digits.join('').length !== 6} className="mt-6 flex w-full items-center justify-center gap-2 rounded-xl bg-blue-600 px-4 py-3.5 font-bold text-white disabled:bg-blue-300">{loading && <Loader2 className="animate-spin" size={18}/>} Verificar</button><button onClick={resend} className="mt-5 font-semibold text-blue-600 hover:underline">Reenviar código</button><Link href="/login" className="mt-5 block text-sm font-semibold text-slate-500 hover:text-blue-600">Voltar para o login</Link></div></AuthPage>;
+}

@@ -1,3 +1,2 @@
-export default function Placeholder({ title }: { title: string }) {
-  return <div><h1 className="text-3xl font-bold">{title}</h1><div className="mt-6 rounded-2xl border border-white/10 bg-zinc-950/60 p-8 text-zinc-400">Módulo preparado para a próxima etapa do protótipo.</div></div>;
-}
+import { Boxes } from 'lucide-react';
+export default function Placeholder({ title }: { title: string }) { return <div><div className="page-heading"><div><div className="page-heading__eyebrow">Z10 CRM</div><h1>{title}</h1><p>Este espaço está pronto para receber os recursos da sua operação.</p></div></div><div className="crm-card flex min-h-64 flex-col items-center justify-center p-8 text-center"><div className="mb-4 flex h-12 w-12 items-center justify-center rounded-md bg-blue-50 text-primary"><Boxes size={22}/></div><h2 className="text-sm font-bold">Módulo em preparação</h2><p className="mt-2 max-w-md text-sm leading-6 text-muted">A estrutura visual já está integrada ao restante do CRM.</p></div></div>; }
