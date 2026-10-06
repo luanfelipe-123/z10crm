@@ -21,6 +21,7 @@ alter table public.crm_forms
   add column if not exists tenant_id uuid references public.tenants(id) on delete cascade,
   add column if not exists created_by uuid references auth.users(id) on delete set null,
   add column if not exists name text not null default 'Novo formulário',
+  add column if not exists title text not null default 'Novo formulário',
   add column if not exists slug text,
   add column if not exists status text not null default 'draft',
   add column if not exists settings jsonb not null default '{}'::jsonb,

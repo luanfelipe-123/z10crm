@@ -37,7 +37,7 @@ export default function FormulariosPage() {
     if (!tenantId || !userId) return;
     setCreating(true); setMessage('');
     const unique = `${slugify('novo-formulario')}-${Math.random().toString(36).slice(2, 8)}`;
-    const { data, error } = await supabase.from('crm_forms').insert({ tenant_id: tenantId, created_by: userId, name: 'Novo formulário', slug: unique, settings: defaultSettings }).select('*').single();
+    const { data, error } = await supabase.from('crm_forms').insert({ tenant_id: tenantId, created_by: userId, name: 'Novo formulário', title: 'Novo formulário', slug: unique, settings: defaultSettings }).select('*').single();
     setCreating(false);
     if (error || !data) return setMessage(error?.message ?? 'Não foi possível criar o formulário. Execute a migração forms.sql no Supabase.');
     router.push(`/formularios/${data.id}`);

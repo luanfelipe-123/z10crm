@@ -62,7 +62,8 @@ export default function FormEditor({ formId }: { formId: string }) {
     if (!form) return;
     setSaving(true); setMessage('');
     const cleanedSlug = slugify(form.slug || form.name);
-    const { error: formError } = await supabase.from('crm_forms').update({ name: form.name.trim() || 'Novo formulário', slug: cleanedSlug, status: publish ? 'published' : form.status, settings: form.settings, updated_at: new Date().toISOString() }).eq('id', form.id);
+    const formName = form.name.trim() || 'Novo formulário';
+    const { error: formError } = await supabase.from('crm_forms').update({ name: formName, title: formName, slug: cleanedSlug, status: publish ? 'published' : form.status, settings: form.settings, updated_at: new Date().toISOString() }).eq('id', form.id);
     if (formError) { setSaving(false); return setMessage(formError.message); }
     const { error: deleteError } = await supabase.from('crm_form_fields').delete().eq('form_id', form.id);
     if (deleteError) { setSaving(false); return setMessage(deleteError.message); }
