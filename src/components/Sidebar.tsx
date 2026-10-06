@@ -3,7 +3,7 @@
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import {
-  LayoutGrid, Funnel, Users, Rocket, Workflow, MessageSquare, Bot,
+  LayoutGrid, Funnel, Users, Rocket, Workflow, MessageSquare, Bot, FileText,
   Gift, Bell, CircleHelp, Settings, CalendarDays, LogOut,
 } from 'lucide-react';
 import type { LucideIcon } from 'lucide-react';
@@ -12,6 +12,7 @@ const main = [
   ['/inicio', 'Início', LayoutGrid],
   ['/pipelines', 'Pipelines', Funnel],
   ['/leads', 'Leads', Users],
+  ['/formularios', 'Formulários', FileText],
   ['/impulsos', 'Impulsos', Rocket],
   ['/automacoes', 'Automações', Workflow],
   ['/chat', 'Chat ao vivo', MessageSquare],
