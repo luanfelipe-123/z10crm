@@ -6,7 +6,7 @@ import { Bell, Menu, Search } from 'lucide-react';
 import Sidebar from './Sidebar';
 import { supabase } from '@/lib/supabase';
 
-const labels: Record<string, string> = { inicio: 'Visão geral', pipelines: 'Pipelines', leads: 'Leads', impulsos: 'Impulsos', automacoes: 'Automações', chat: 'Chat ao vivo', 'agentes-ia': 'Agentes de IA', calendario: 'Calendário', notificacoes: 'Notificações', ajuda: 'Central de ajuda', 'indique-e-ganhe': 'Indique e ganhe' };
+const labels: Record<string, string> = { inicio: 'Visão geral', pipelines: 'Pipelines', leads: 'Leads', formularios: 'Formulários', impulsos: 'Impulsos', automacoes: 'Automações', chat: 'Chat ao vivo', 'agentes-ia': 'Agentes de IA', calendario: 'Calendário', notificacoes: 'Notificações', ajuda: 'Central de ajuda', 'indique-e-ganhe': 'Indique e ganhe' };
 
 export default function CrmShell({ children }: { children: ReactNode }) {
   const router = useRouter();

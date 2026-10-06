@@ -2,12 +2,12 @@
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { Bell, Bot, CalendarDays, CircleHelp, Funnel, Gift, LayoutGrid, LogOut, MessageSquare, Rocket, Settings, Users, Workflow, X } from 'lucide-react';
+import { Bell, Bot, CalendarDays, CircleHelp, FileText, Funnel, Gift, LayoutGrid, LogOut, MessageSquare, Rocket, Settings, Users, Workflow, X } from 'lucide-react';
 import type { LucideIcon } from 'lucide-react';
 import Z10Brand from './z10-brand';
 
 const main = [
-  ['/inicio', 'Início', LayoutGrid], ['/pipelines', 'Pipelines', Funnel], ['/leads', 'Leads', Users],
+  ['/inicio', 'Início', LayoutGrid], ['/pipelines', 'Pipelines', Funnel], ['/leads', 'Leads', Users], ['/formularios', 'Formulários', FileText],
   ['/impulsos', 'Impulsos', Rocket], ['/automacoes', 'Automações', Workflow], ['/chat', 'Chat ao vivo', MessageSquare], ['/agentes-ia', 'Agentes de IA', Bot],
 ] as const;
 const secondary = [

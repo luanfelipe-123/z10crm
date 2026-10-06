@@ -14,6 +14,8 @@
   --border: oklch(0.89 0.018 255);
   --success: oklch(0.65 0.17 155);
   --danger: oklch(0.62 0.22 27);
+  --font-manrope: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  --font-geist-mono: "SFMono-Regular", Consolas, "Liberation Mono", monospace;
   --shadow-soft: 0 14px 40px color-mix(in oklab, var(--surface-dark) 10%, transparent);
   --shadow-card: 0 5px 18px color-mix(in oklab, var(--surface-dark) 7%, transparent);
 }
@@ -112,6 +114,88 @@ button, a { -webkit-tap-highlight-color: transparent; }
 .settings-container { width: 100%; max-width: 78rem; margin: 0 auto; padding: clamp(1rem, 3vw, 2.2rem); }
 .settings-panel { border: 1px solid var(--border); border-radius: .5rem; background: var(--surface); box-shadow: var(--shadow-card); }
 
+/* Formulários */
+.form-primary-button, .form-secondary-button, .form-icon-action { display: inline-flex; align-items: center; justify-content: center; gap: .5rem; border-radius: .45rem; font-size: .82rem; font-weight: 750; text-decoration: none; cursor: pointer; transition: .16s ease; }
+.form-primary-button { min-height: 2.6rem; padding: 0 1rem; border: 1px solid var(--primary); background: var(--primary); color: white; box-shadow: 0 8px 18px color-mix(in oklab, var(--primary) 18%, transparent); }
+.form-primary-button:hover { background: var(--primary-strong); }
+.form-primary-button:disabled { cursor: wait; opacity: .55; }
+.form-secondary-button { min-height: 2.6rem; padding: 0 .9rem; border: 1px solid var(--border); background: var(--surface); color: var(--foreground); }
+.form-secondary-button:hover, .form-icon-action:hover { border-color: color-mix(in oklab, var(--primary) 40%, var(--border)); background: var(--surface-soft); }
+.form-notice { display: flex; align-items: center; justify-content: space-between; gap: 1rem; margin: 0 0 1rem; padding: .8rem 1rem; border: 1px solid color-mix(in oklab, var(--primary) 20%, var(--border)); border-radius: .45rem; background: color-mix(in oklab, var(--primary) 7%, var(--surface)); color: var(--primary-strong); font-size: .8rem; }
+.form-notice button { display: inline-flex; align-items: center; gap: .4rem; border: 0; background: transparent; color: inherit; font: inherit; font-weight: 750; cursor: pointer; }
+.form-empty, .form-loading { display: flex; min-height: 19rem; align-items: center; justify-content: center; flex-direction: column; gap: .8rem; border: 1px dashed var(--border); border-radius: .6rem; background: var(--surface); color: var(--muted); text-align: center; }
+.form-empty h2 { margin: .25rem 0 0; color: var(--foreground); font-size: 1.05rem; }
+.form-empty p { max-width: 28rem; margin: 0; font-size: .84rem; line-height: 1.6; }
+.form-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(17rem, 1fr)); gap: 1rem; }
+.form-card { padding: 1.1rem; border: 1px solid var(--border); border-radius: .55rem; background: var(--surface); box-shadow: var(--shadow-card); }
+.form-card__top { display: flex; align-items: center; justify-content: space-between; }
+.form-status { padding: .24rem .52rem; border-radius: 999px; font-size: .65rem; font-weight: 800; letter-spacing: .04em; text-transform: uppercase; }
+.form-status--published { background: color-mix(in oklab, var(--success) 14%, transparent); color: color-mix(in oklab, var(--success) 70%, var(--foreground)); }
+.form-status--draft { background: var(--surface-soft); color: var(--muted); }
+.form-card h2 { overflow: hidden; margin: 1rem 0 .3rem; color: var(--foreground); font-size: 1rem; text-overflow: ellipsis; white-space: nowrap; }
+.form-card p { margin: 0; color: var(--muted); font-size: .73rem; }
+.form-card__link { overflow: hidden; margin-top: 1rem; padding: .65rem .7rem; border-radius: .35rem; background: var(--surface-soft); color: var(--muted); font-family: var(--font-geist-mono), monospace; font-size: .69rem; text-overflow: ellipsis; white-space: nowrap; }
+.form-card__actions { display: flex; align-items: center; gap: .45rem; margin-top: 1rem; }
+.form-card__actions .form-secondary-button { flex: 1; }
+.form-icon-action { width: 2.35rem; height: 2.35rem; border: 1px solid var(--border); background: var(--surface); color: var(--muted); }
+.form-icon-action--danger:hover { border-color: color-mix(in oklab, var(--danger) 40%, var(--border)); color: var(--danger); }
+
+.form-editor-page { margin: calc(clamp(1rem, 3vw, 2.25rem) * -1); min-height: calc(100vh - 4.25rem); background: var(--surface-soft); }
+.form-editor-header { position: sticky; top: 4.25rem; z-index: 20; display: flex; min-height: 4.3rem; align-items: center; gap: .85rem; padding: .7rem clamp(1rem, 3vw, 2.25rem); border-bottom: 1px solid var(--border); background: color-mix(in oklab, var(--surface) 94%, transparent); backdrop-filter: blur(12px); }
+.form-back { display: inline-flex; align-items: center; justify-content: center; width: 2.25rem; height: 2.25rem; border: 1px solid var(--border); border-radius: .4rem; color: var(--muted); }
+.form-title-input { min-width: 0; flex: 1; border: 0; background: transparent; color: var(--foreground); font-size: 1rem; font-weight: 800; outline: none; }
+.form-editor-header__actions { display: flex; gap: .5rem; }
+.form-notice--editor { margin: .75rem clamp(1rem, 3vw, 2.25rem) 0; }
+.form-editor-layout { display: grid; grid-template-columns: 17rem minmax(30rem, 1fr) 19rem; min-height: calc(100vh - 8.55rem); }
+.form-toolbox, .form-properties { background: var(--surface); }
+.form-toolbox { border-right: 1px solid var(--border); }
+.form-properties { border-left: 1px solid var(--border); }
+.form-tabs { display: grid; grid-template-columns: repeat(3, 1fr); padding: .55rem; border-bottom: 1px solid var(--border); gap: .3rem; }
+.form-tabs button { display: inline-flex; align-items: center; justify-content: center; gap: .3rem; min-height: 2.35rem; border: 0; border-radius: .35rem; background: transparent; color: var(--muted); font-size: .73rem; font-weight: 750; cursor: pointer; }
+.form-tabs button.is-active { background: var(--surface-soft); color: var(--foreground); box-shadow: 0 1px 3px color-mix(in oklab, var(--surface-dark) 11%, transparent); }
+.form-toolbox-body, .form-properties__body { padding: 1rem; }
+.form-toolbox-body h2 { margin: 0 0 .8rem; color: var(--muted); font-size: .68rem; font-weight: 850; letter-spacing: .09em; text-transform: uppercase; }
+.form-field-catalog { display: grid; gap: .45rem; }
+.form-field-catalog button { display: flex; align-items: center; gap: .6rem; min-height: 2.55rem; padding: .55rem .7rem; border: 1px solid var(--border); border-radius: .4rem; background: var(--surface); color: var(--foreground); font-size: .8rem; font-weight: 700; text-align: left; cursor: pointer; }
+.form-field-catalog button:hover { border-color: color-mix(in oklab, var(--primary) 40%, var(--border)); color: var(--primary-strong); }
+.form-toolbox-body label, .form-properties__body > label { display: grid; gap: .38rem; margin-bottom: .85rem; color: var(--foreground); font-size: .76rem; font-weight: 750; }
+.form-toolbox-body input, .form-toolbox-body select, .form-toolbox-body textarea, .form-properties input, .form-properties textarea { width: 100%; border: 1px solid var(--border); border-radius: .38rem; background: var(--surface); padding: .6rem .65rem; color: var(--foreground); font-size: .8rem; outline: none; }
+.form-toolbox-body textarea, .form-properties textarea { min-height: 5.2rem; resize: vertical; }
+.form-toolbox-body input:focus, .form-toolbox-body select:focus, .form-toolbox-body textarea:focus, .form-properties input:focus, .form-properties textarea:focus { border-color: var(--primary); box-shadow: 0 0 0 3px color-mix(in oklab, var(--primary) 12%, transparent); }
+.form-toolbox-body hr { margin: 1rem 0; border: 0; border-top: 1px solid var(--border); }
+.form-helper { margin: -.25rem 0 .8rem; color: var(--muted); font-size: .69rem; line-height: 1.5; }
+.form-label { display: block; margin-bottom: .4rem; color: var(--foreground); font-size: .76rem; font-weight: 750; }
+.weekday-list { display: flex; flex-wrap: wrap; gap: .35rem; margin: 0 0 .9rem; }
+.weekday-list label { display: flex; align-items: center; gap: .22rem; margin: 0; font-size: .66rem; }
+.form-toggle { display: flex !important; align-items: center; grid-template-columns: auto 1fr !important; gap: .5rem !important; margin: .85rem 0 !important; cursor: pointer; }
+.form-toggle input { width: 1rem !important; height: 1rem; padding: 0 !important; }
+.form-builder-canvas { overflow: auto; padding: clamp(1rem, 4vw, 3.5rem); }
+.form-preview { width: min(100%, 48rem); min-height: 36rem; margin: 0 auto; padding: clamp(1.25rem, 4vw, 3rem); border: 1px solid var(--border); border-radius: .7rem; background: var(--surface); box-shadow: var(--shadow-soft); }
+.form-preview__header { display: flex; justify-content: space-between; margin-bottom: 1.5rem; color: var(--muted); font-size: .68rem; font-weight: 750; letter-spacing: .06em; text-transform: uppercase; }
+.form-preview__empty { display: flex; min-height: 22rem; align-items: center; justify-content: center; flex-direction: column; color: var(--muted); font-size: .8rem; }
+.form-preview-field { position: relative; margin: 0 0 1rem; padding: .85rem; border: 2px solid transparent; border-radius: .5rem; cursor: grab; transition: .14s ease; }
+.form-preview-field:hover { background: var(--surface-soft); }
+.form-preview-field.is-active { border-color: var(--primary); background: color-mix(in oklab, var(--primary) 5%, var(--surface)); }
+.form-preview-field > label { display: block; margin: 0 0 .4rem; color: var(--foreground); font-size: .93rem; font-weight: 800; }
+.form-preview-field > label span { color: var(--danger); }
+.form-preview-field > small { display: block; margin: -.1rem 0 .5rem; color: var(--muted); font-size: .72rem; }
+.form-preview-field > input, .form-preview-field > textarea, .form-preview-select { width: 100%; border: 1px solid var(--border); border-radius: .4rem; background: var(--surface); padding: .72rem .75rem; color: var(--muted); font-size: .8rem; }
+.form-preview-field > textarea { min-height: 5rem; }
+.form-preview-select { display: flex; align-items: center; justify-content: space-between; }
+.form-preview-options { display: grid; gap: .42rem; }
+.form-preview-options div { display: flex; align-items: center; gap: .55rem; padding: .65rem .7rem; border: 1px solid var(--border); border-radius: .38rem; color: var(--foreground); font-size: .8rem; }
+.preview-radio, .preview-checkbox { width: 1rem; height: 1rem; border: 1px solid var(--border); }
+.preview-radio { border-radius: 50%; }.preview-checkbox { border-radius: .2rem; }
+.form-drag-handle { position: absolute; top: .55rem; right: .45rem; display: inline-flex; align-items: center; justify-content: center; width: 1.75rem; height: 1.75rem; border: 0; border-radius: .3rem; background: transparent; color: var(--muted); cursor: grab; opacity: .15; }
+.form-preview-field:hover .form-drag-handle, .form-preview-field.is-active .form-drag-handle { opacity: 1; }
+.booking-preview { padding: .75rem; border: 1px solid color-mix(in oklab, var(--primary) 25%, var(--border)); border-radius: .4rem; background: color-mix(in oklab, var(--primary) 5%, var(--surface)); }
+.booking-preview strong { display: block; margin-bottom: .55rem; color: var(--primary-strong); font-size: .78rem; }.booking-preview > div { display: flex; gap: .45rem; }.booking-preview input { min-width: 0; flex: 1; border: 1px solid var(--border); border-radius: .34rem; padding: .55rem; }.booking-preview button { border: 0; border-radius: .34rem; background: var(--primary); color: white; padding: .55rem .7rem; font-size: .72rem; font-weight: 750; }.booking-preview small { display: block; margin-top: .5rem; color: var(--muted); font-size: .65rem; }
+.form-preview__submit { display: block; min-width: 8.5rem; margin: 1.4rem 0 0 auto; border: 0; border-radius: .4rem; background: var(--primary); color: white; padding: .72rem 1rem; font-size: .8rem; font-weight: 800; }
+.form-properties__empty { padding: 1.2rem; color: var(--muted); font-size: .8rem; line-height: 1.6; }.form-properties__type { margin-bottom: 1.1rem; color: var(--primary); font-size: .65rem; font-weight: 850; letter-spacing: .08em; }
+.form-option-editor { margin: .95rem 0; }.form-option-editor > div { display: flex; gap: .35rem; margin-bottom: .4rem; }.form-option-editor button { display: inline-flex; align-items: center; justify-content: center; width: 2.15rem; flex: 0 0 auto; border: 1px solid var(--border); border-radius: .35rem; background: var(--surface); color: var(--muted); cursor: pointer; }.form-add-option { display: inline-flex !important; width: auto !important; align-items: center; gap: .32rem; padding: .42rem .55rem; color: var(--primary) !important; font-size: .7rem; font-weight: 750; }.form-delete-button { display: inline-flex; align-items: center; gap: .45rem; margin-top: 1.2rem; border: 0; background: transparent; color: var(--danger); font-size: .78rem; font-weight: 750; cursor: pointer; }
+
+.public-form-shell { display: flex; min-height: 100svh; justify-content: center; padding: clamp(1rem, 6vw, 5rem) 1rem; background: linear-gradient(145deg, var(--surface-soft), var(--background)); }.public-form { width: min(100%, 42rem); height: fit-content; padding: clamp(1.3rem, 5vw, 3rem); border: 1px solid var(--border); border-radius: .8rem; background: var(--surface); box-shadow: var(--shadow-soft); }.public-form h1 { margin: 0 0 1.8rem; font-size: clamp(1.3rem, 3vw, 1.9rem); }.public-form--welcome, .public-form--success { margin-top: min(15vh, 8rem); text-align: center; }.public-form--welcome h1, .public-form--success h1 { margin: .5rem 0; }.public-form--welcome p, .public-form--success p { color: var(--muted); line-height: 1.6; }.public-form--success svg { color: var(--success); }.public-form__eyebrow { color: var(--primary); font-size: .75rem; font-weight: 800; }.public-form button { display: inline-flex; align-items: center; justify-content: center; gap: .4rem; min-height: 2.7rem; border: 0; border-radius: .42rem; background: var(--primary); color: white; padding: 0 1rem; font-size: .84rem; font-weight: 800; cursor: pointer; }.public-form button:disabled { opacity: .55; cursor: wait; }.public-progress { margin-bottom: 1.75rem; color: var(--muted); font-size: .7rem; }.public-progress i { display: block; height: .26rem; margin-top: .45rem; border-radius: 999px; background: var(--primary); transition: width .2s ease; }.public-field { margin-bottom: 1.35rem; }.public-field > label { display: block; margin-bottom: .42rem; font-size: .9rem; font-weight: 800; }.public-field em { color: var(--danger); font-style: normal; }.public-field > small { display: block; margin: -.15rem 0 .45rem; color: var(--muted); font-size: .72rem; }.public-field input, .public-field textarea, .public-field select { width: 100%; border: 1px solid var(--border); border-radius: .4rem; background: var(--surface); padding: .78rem .8rem; color: var(--foreground); outline: none; }.public-field textarea { min-height: 7rem; resize: vertical; }.public-field input:focus, .public-field textarea:focus, .public-field select:focus { border-color: var(--primary); box-shadow: 0 0 0 3px color-mix(in oklab, var(--primary) 12%, transparent); }.public-options { display: grid; gap: .5rem; }.public-options label { display: flex; align-items: center; gap: .65rem; border: 1px solid var(--border); border-radius: .4rem; padding: .7rem .75rem; cursor: pointer; }.public-options input { width: 1rem; height: 1rem; }.public-form__actions { display: flex; justify-content: flex-end; gap: .6rem; margin-top: 1.6rem; }.public-form__back { margin-right: auto; background: var(--surface) !important; color: var(--foreground) !important; border: 1px solid var(--border) !important; }.public-form__error { margin: .6rem 0; color: var(--danger); font-size: .78rem; }.public-form__muted { color: var(--muted) !important; font-size: .78rem; }.public-booking { padding: .9rem; border: 1px solid color-mix(in oklab, var(--primary) 25%, var(--border)); border-radius: .5rem; background: color-mix(in oklab, var(--primary) 5%, var(--surface)); }.public-booking__date { display: flex; align-items: center; gap: .5rem; padding: .55rem .65rem; border: 1px solid var(--border); border-radius: .4rem; background: var(--surface); }.public-booking__date input { border: 0; padding: .2rem; }.public-booking__slots { display: grid; grid-template-columns: repeat(3, 1fr); gap: .45rem; margin-top: .65rem; }.public-booking__slots button { min-height: 2.3rem; border: 1px solid color-mix(in oklab, var(--primary) 35%, var(--border)); background: var(--surface); color: var(--primary-strong); padding: 0; }.public-booking__slots button.is-selected { background: var(--primary); color: white; }
+
 @media (max-width: 900px) {
   .crm-sidebar { transform: translateX(-102%); box-shadow: var(--shadow-soft); }
   .crm-sidebar--open { transform: translateX(0); }
@@ -122,6 +206,7 @@ button, a { -webkit-tap-highlight-color: transparent; }
   .auth-story { display: none; }
   .auth-frame { min-height: calc(100svh - 1.8rem); background: var(--background); }
   .metric-grid { grid-template-columns: 1fr; }
+  .form-editor-layout { grid-template-columns: 15rem minmax(26rem, 1fr); }.form-properties { display: none; }
 }
 
 @media (max-width: 520px) {
@@ -131,6 +216,7 @@ button, a { -webkit-tap-highlight-color: transparent; }
   .crm-content { padding: 1rem; }
   .crm-topbar { padding: 0 1rem; }
   .page-heading { align-items: flex-start; flex-direction: column; }
+  .form-editor-header { top: 4.25rem; flex-wrap: wrap; }.form-editor-header__actions { width: 100%; }.form-editor-header__actions button { flex: 1; }.form-editor-layout { display: block; }.form-toolbox { border-right: 0; border-bottom: 1px solid var(--border); }.form-field-catalog { grid-template-columns: repeat(2, minmax(0, 1fr)); }.form-builder-canvas { padding: 1rem; }.form-preview { padding: 1rem; }.form-properties { display: block; border-left: 0; border-top: 1px solid var(--border); }.public-booking__slots { grid-template-columns: repeat(2, 1fr); }
 }
 
 @media (prefers-reduced-motion: reduce) {
