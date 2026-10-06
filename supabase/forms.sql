@@ -15,6 +15,21 @@ create table if not exists public.crm_forms (
   updated_at timestamptz not null default now()
 );
 
+-- Compatibilidade: algumas versões anteriores do CRM já possuíam uma tabela
+-- crm_forms sem a separação por empresa. Não removemos registros existentes.
+alter table public.crm_forms
+  add column if not exists tenant_id uuid references public.tenants(id) on delete cascade,
+  add column if not exists created_by uuid references auth.users(id) on delete set null,
+  add column if not exists name text not null default 'Novo formulário',
+  add column if not exists slug text,
+  add column if not exists status text not null default 'draft',
+  add column if not exists settings jsonb not null default '{}'::jsonb,
+  add column if not exists created_at timestamptz not null default now(),
+  add column if not exists updated_at timestamptz not null default now();
+
+alter table public.crm_forms drop constraint if exists crm_forms_status_check;
+alter table public.crm_forms add constraint crm_forms_status_check check (status in ('draft', 'published'));
+
 create table if not exists public.crm_form_fields (
   id uuid primary key default gen_random_uuid(),
   form_id uuid not null references public.crm_forms(id) on delete cascade,
@@ -30,6 +45,19 @@ create table if not exists public.crm_form_fields (
   updated_at timestamptz not null default now()
 );
 
+alter table public.crm_form_fields
+  add column if not exists form_id uuid references public.crm_forms(id) on delete cascade,
+  add column if not exists field_type text,
+  add column if not exists label text,
+  add column if not exists placeholder text,
+  add column if not exists help_text text,
+  add column if not exists required boolean not null default false,
+  add column if not exists position integer not null default 0,
+  add column if not exists options jsonb not null default '[]'::jsonb,
+  add column if not exists config jsonb not null default '{}'::jsonb,
+  add column if not exists created_at timestamptz not null default now(),
+  add column if not exists updated_at timestamptz not null default now();
+
 create table if not exists public.crm_form_submissions (
   id uuid primary key default gen_random_uuid(),
   form_id uuid not null references public.crm_forms(id) on delete cascade,
@@ -41,6 +69,16 @@ create table if not exists public.crm_form_submissions (
   created_at timestamptz not null default now()
 );
 
+alter table public.crm_form_submissions
+  add column if not exists form_id uuid references public.crm_forms(id) on delete cascade,
+  add column if not exists tenant_id uuid references public.tenants(id) on delete cascade,
+  add column if not exists lead_id uuid references public.leads(id) on delete set null,
+  add column if not exists answers jsonb not null default '{}'::jsonb,
+  add column if not exists metadata jsonb not null default '{}'::jsonb,
+  add column if not exists scheduled_for timestamptz,
+  add column if not exists created_at timestamptz not null default now();
+
+create unique index if not exists crm_forms_slug_key on public.crm_forms(slug) where slug is not null;
 create index if not exists crm_forms_tenant_idx on public.crm_forms(tenant_id, updated_at desc);
 create index if not exists crm_form_fields_form_position_idx on public.crm_form_fields(form_id, position);
 create index if not exists crm_form_submissions_form_created_idx on public.crm_form_submissions(form_id, created_at desc);
