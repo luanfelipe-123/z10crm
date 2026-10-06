@@ -23,7 +23,20 @@ export default function PublicForm({ form, fields }: { form: PublicFormModel; fi
   const totalSteps = standardFields.length + (booking ? 1 : 0);
   const currentIndex = step < 0 ? 0 : Math.min(step + 1, totalSteps);
 
-  useEffect(() => { if (!form.settings.pixelId || document.getElementById('z10-meta-pixel')) return; const script = document.createElement('script'); script.id = 'z10-meta-pixel'; script.async = true; script.src = 'https://connect.facebook.net/en_US/fbevents.js'; document.head.appendChild(script); const win = window as Window & { fbq?: (...args: unknown[]) => void }; const boot = window.setInterval(() => { if (win.fbq) { win.fbq('init', form.settings.pixelId); win.fbq('track', 'PageView'); window.clearInterval(boot); } }, 100); return () => window.clearInterval(boot); }, [form.settings.pixelId]);
+  useEffect(() => {
+    if (!form.settings.pixelId) return;
+    type PixelFunction = ((...args: unknown[]) => void) & { queue?: unknown[][]; loaded?: boolean; version?: string };
+    const win = window as Window & { fbq?: PixelFunction; _fbq?: PixelFunction };
+    if (!win.fbq) {
+      const pixel = ((...args: unknown[]) => { pixel.queue?.push(args); }) as PixelFunction;
+      pixel.queue = []; pixel.loaded = true; pixel.version = '2.0';
+      win.fbq = pixel; win._fbq = pixel;
+      const script = document.createElement('script'); script.id = 'z10-meta-pixel'; script.async = true; script.src = 'https://connect.facebook.net/en_US/fbevents.js';
+      document.head.appendChild(script);
+    }
+    win.fbq('init', form.settings.pixelId);
+    win.fbq('track', 'PageView');
+  }, [form.settings.pixelId]);
 
   function setValue(field: FormField, value: unknown) { setAnswers((current) => ({ ...current, [field.id]: value })); }
   function validate(fieldsToValidate: FormField[]) { const missing = fieldsToValidate.find((field) => field.required && (answers[field.id] === undefined || answers[field.id] === '' || (Array.isArray(answers[field.id]) && !(answers[field.id] as unknown[]).length))); if (missing) { setError(`Preencha “${missing.label}” para continuar.`); return false; } setError(''); return true; }
